@@ -139,5 +139,28 @@ public class ItunesDAO {
 		return result;
 	}
 	
+	public Double getPrezzo(Integer albumid){
+		final String sql = "select sum(t.unitprice) as prezzo "
+				+ "from track t, album a "
+				+ "where a.albumid=t.albumid and a.albumid=? ";
+		double result = 0.0;
+		
+		try {
+			Connection conn = DBConnect.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setInt(1, albumid);
+			ResultSet res = st.executeQuery();
+
+			while (res.next()) {
+				result=res.getLong("prezzo");
+			}
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException("SQL Error");
+		}
+		return result;
+	}
+	
 	
 }
